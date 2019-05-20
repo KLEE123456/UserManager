@@ -15,5 +15,34 @@
    </insert>
     <select id="findUser" resultType="user" parameterType="map">
         select * from user_
+        <where>
+          <if test="userId!='' and userId!=null">
+              and userId=#{userId}
+          </if>
+        </where>
     </select>
+    <insert id="insertUser" parameterType="user">
+        insert into user_ values (default,#{userName},#{userPwd} ,#{userSex} ,#{userPhone})
+    </insert>
+    <update id="updateUser"  parameterType="user">
+          update  user_
+          <set>
+              <if test="userName != null and userName != ''">
+                  userName=#{userName},
+              </if>
+              <if test="userPwd != null and userPwd != ''">
+                  userPwd=#{userPwd} ,
+              </if>
+              <if test="userSex != null and userSex != ''">
+                  userSex=#{userSex} ,
+              </if>
+              <if test="userPhone != null and userPhone != ''">
+                  userPhone=#{userPhone},
+              </if>
+          </set>
+          where  userId=#{userId}
+    </update>
+    <delete id="deleteUser" parameterType="integer">
+          delete from  user_ where  userId=#{userId}
+    </delete>
 </mapper>

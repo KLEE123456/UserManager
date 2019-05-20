@@ -7,13 +7,17 @@ import com.klee.UserManager.utils.Md5Encrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -64,7 +68,6 @@ public class UserController {
     }
     @RequestMapping(value = "findAllUser")
     public String findAllUser(Model model,HttpSession session,Integer pageNum){
-        System.out.println(pageNum);
         List<User> userList = userService.findUser(null,pageNum);
         PageInfo pageInfo=new PageInfo(userList);
         session.setAttribute("page",pageInfo);
@@ -76,5 +79,58 @@ public class UserController {
         session.invalidate();
         return "login";
     }
+    @RequestMapping(value = "insertUser")
+    public  String  insertUser(User user,Model model){
+        String pwd=user.getUserPwd();
+        user.setUserPwd(Md5Encrypt.MD5(pwd));
+        int rows = userService.insertUser(user);
+        if (rows>0){
+            return  "forward:findAllUser.action";
+        }
+        else {
+            model.addAttribute("ist","添加失败!请和管理员联系");
+            return "add";
+        }
+    }
+    @RequestMapping(value = "editXr")
+    public  String  editXr(Integer userId,Integer pageNum,Model model,HttpSession session){
+        session.setAttribute("pageNum",pageNum);
+        Map<String,Object> map=new HashMap<>();
+        map.put("userId",userId);
+        List<User> user = userService.findUser(map, pageNum);
+        model.addAttribute("user",user.get(0));
+        return  "userEdit";
+    }
+    @RequestMapping(value = "editUser")
+    public String editUser(User user,HttpSession session,Model model){
+        Integer pageNum=(Integer)session.getAttribute("pageNum");
+        System.out.println(user);
+        int rows = userService.updateUser(user);
+        if (rows>0){
+            return "forward:findAllUser.action?pageNum="+pageNum;
+        }
+        else {
+            model.addAttribute("msg","编辑错误!");
+           return "userEdit";
+        }
+    }
+    @RequestMapping(value = "testJson")
+    @ResponseBody
+    public User testJson(@RequestBody User user){
+        System.out.println(user);
+        return  user;
+    }
+    @RequestMapping(value = "deleteUser")
+    public String deleteUser(Integer userId, Integer pageNum,HttpServletResponse response) throws IOException {
+        int rows = userService.deleteUser(userId);
+        if (rows>0){
+            return "forward:findAllUser.action?pageNum="+pageNum;
+        }
+        else {
+            PrintWriter out = response.getWriter();
+            out.print("<script>alert('删除失败！')</script>");
+           return "forward:findAllUser.action?pageNum="+pageNum;
+        }
 
+    }
 }

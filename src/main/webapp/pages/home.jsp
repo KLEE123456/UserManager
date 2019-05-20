@@ -12,14 +12,14 @@
     <script src="<%=path%>/bootstrap/bootstrap.js" type="text/javascript"></script>
     <script src="<%=path%>/bootstrap-table/bootstrap-table.js" type="text/javascript"></script>
     <script type="text/javascript">
-        function  checkDel(adminName,adminId,pageNum) {
-            if(confirm("你确定删除"+adminName+"这条记录吗?")){
-                location.href='<%=path%>/delete.do?adminid='+adminId+'&pageNum='+pageNum;
+        function  checkDel(userName,userId,pageNum) {
+            if(confirm("你确定删除"+userName+"这条记录吗?")){
+                location.href='${pageContext.request.contextPath}/user/deleteUser.action?userId='+userId+'&pageNum='+pageNum;
             }
         }
         $(function () {
             $("#addId").click(function () {
-                location.href='../add.jsp';
+                location.href='/pages/add.jsp';
             })
             $("#rlogin").click(function () {
                 $("#form1").submit();
@@ -88,7 +88,7 @@
                     <td align="center">${user.userSex}</td>
                     <td align="center">${user.userPhone}</td>
                     <td align="center">
-                        <a href="../xr.do?userId=${user.userId}&pageNum=${page.pageNum}">编辑</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a href="${pageContext.request.contextPath}/user/editXr.action?userId=${user.userId}&pageNum=${page.pageNum}">编辑</a>&nbsp;&nbsp;&nbsp;&nbsp;
 
                         <a href="javascript:void(0)" onclick="checkDel('${user.userName}','${user.userId}','${page.pageNum}')">删除</a>
                     </td>

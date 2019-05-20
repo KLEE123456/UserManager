@@ -10,4 +10,7 @@ public interface UserService {
     User checkName(String  userName);
     int register(User user);
     List<User> findUser(Map map,Integer pageNum);
+    int insertUser(User user);
+    int updateUser(User user);
+    int deleteUser(Integer userId);
 }

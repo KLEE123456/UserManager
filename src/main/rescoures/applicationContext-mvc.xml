@@ -11,7 +11,6 @@
     <context:component-scan base-package="com.klee.UserManager.controller" />
     <mvc:annotation-driven/>
     <mvc:default-servlet-handler/>
-    <!--安全访问设置-->
     <!--定义视图解析器-->
     <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <!--配置前缀-->

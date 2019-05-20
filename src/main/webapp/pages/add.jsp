@@ -6,7 +6,7 @@
 <%@page isELIgnored="false" %>
 <html>
 <head>
-    <title>Register</title>
+    <title>Add</title>
     <script src="<%=path%>/js/jquery-3.3.1.js" type="text/javascript"></script>
     <script type="text/javascript">
         $(function () {
@@ -22,7 +22,7 @@
                         data:{userName:userName},
                         success:function (data) {
                             if (data==1){
-                                $("#myspan").text("用户名检测成功，可注册!");
+                                $("#myspan").text("用户名检测成功，可添加!");
                                 document.getElementById("regbtn").disabled=false;
                             }
                             if (data==0){
@@ -62,8 +62,8 @@
 </head>
 <body>
 <center>
-    <form action="${pageContext.request.contextPath}/user/register.action" method="post" id="form" name="form" style="background-color: aliceblue">
-        <h2>用户注册界面</h2>
+    <form action="${pageContext.request.contextPath}/user/insertUser.action" method="post" id="form" name="form" style="background-color: aliceblue">
+        <h2>用户新增界面</h2>
         <p></p>
         <font>用户名:</font>
         <input type="text" name="userName"  id="userName">
@@ -81,9 +81,9 @@
         <input type="radio" name="userSex" id="userSex女" value="女"><label for="userSex女">女</label>
         <p/>
         <span id="msg" style="color: red;"></span>
-        <input type="button" value="确定注册" id="regbtn" name="regbtn">
+        <input type="button" value="确定添加" id="regbtn" name="regbtn">
         <p>
-            <span id="result">${reg}</span>
+            <span id="result">${ist}</span>
         </p>
     </form>
 </center>
