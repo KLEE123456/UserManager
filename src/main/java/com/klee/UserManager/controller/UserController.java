@@ -89,6 +89,7 @@ public class UserController {
         model.addAttribute("userList",userList);
         return "home";
     }
+
     @RequestMapping(value = "userQuit")
     public String userQuit(HttpSession session){
         session.invalidate();
