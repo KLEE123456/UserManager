@@ -18,5 +18,11 @@
         <!--配置后缀-->
         <property name="suffix" value=".jsp"/>
     </bean>
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="com.klee.UserManager.interceptor.LoginInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
 
 </beans>

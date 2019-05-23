@@ -25,12 +25,15 @@
                 $("#form1").submit();
             })
             $("#btn").click(function () {
-                var adminName=$("#adminName").val();
-                if (adminName==''){
-                    alert('请输入用户名!');
+                var userName=$("#userName").val();
+                if (userName==''){
+                    alert('请输入查询的用户名!');
                     return;
                 }
-                $("#form").submit();
+                else {
+                    $("#form2").submit();
+                }
+
             })
         })
     </script>
@@ -54,10 +57,9 @@
     </tr>
     <tr>
         <td colspan="7">
-            <form action="selectAll.do" method="post" id="form" name="form" style="border: 0px;margin: 0px">
-                <input type="text" placeholder="请输入用户名" id="adminName" name="adminName">
+            <form id="form2" name="form2" action="${pageContext.request.contextPath}/user/home.action">
+                <input type="text" placeholder="请输入用户名" id="userName" name="userNames" value="${userNames}">
                 <input type="button" value="查询" id="btn" name="btn" style="background-color:#0062cc;width:60px;color: white">
-                <input type="hidden" value="flag" id="flagId" name="flagName">
             </form>
         </td>
     </tr>
@@ -108,10 +110,10 @@
 <!--boostrap4 版本-->
 <div class="div1" style="padding-left: 60px">
     <ul class="pagination" >
-        <li class="page-item"><a class="page-link" href="<%=path%>/user/findAllUser.action?pageNum=1">首页</a></li>
-        <li class="page-item" id="upPage"><a  class="page-link" href="<%=path%>/user/findAllUser.action?pageNum=${page.prePage}">上一页</a></li>
-        <li class="page-item" id="downPage"><a  class="page-link" href="<%=path%>/user/findAllUser.action?pageNum=${page.nextPage}">下一页</a></li>
-        <li class="page-item"><a class="page-link" href="<%=path%>/user/findAllUser.action?pageNum=${page.pages}">尾页</a></li>
+        <li class="page-item"><a class="page-link" href="<%=path%>/user/home.action?pageNum=1">首页</a></li>
+        <li class="page-item" id="upPage"><a  class="page-link" href="<%=path%>/user/home.action?pageNum=${page.prePage}">上一页</a></li>
+        <li class="page-item" id="downPage"><a  class="page-link" href="<%=path%>/user/home.action?pageNum=${page.nextPage}">下一页</a></li>
+        <li class="page-item"><a class="page-link" href="<%=path%>/user/home.action?pageNum=${page.pages}">尾页</a></li>
     </ul>
 </div>
 </body>

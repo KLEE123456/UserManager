@@ -19,6 +19,9 @@
           <if test="userId!='' and userId!=null">
               and userId=#{userId}
           </if>
+         <if test="userName!='' and userName!=null">
+            and userName like concat('%',#{userName},'%')
+        </if>
         </where>
     </select>
     <insert id="insertUser" parameterType="user">

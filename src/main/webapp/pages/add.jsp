@@ -62,7 +62,7 @@
 </head>
 <body>
 <center>
-    <form action="${pageContext.request.contextPath}/user/insertUser.action" method="post" id="form" name="form" style="background-color: aliceblue">
+    <form action="${pageContext.request.contextPath}/user/add.action" method="post" id="form" name="form" style="background-color: aliceblue">
         <h2>用户新增界面</h2>
         <p></p>
         <font>用户名:</font>

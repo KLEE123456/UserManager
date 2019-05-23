@@ -68,7 +68,7 @@
 </head>
 <body>
     <center>
-    <form action="${pageContext.request.contextPath}/user/editUser.action" method="post" id="form" name="form" style="background-color: aliceblue">
+    <form action="${pageContext.request.contextPath}/user/userEdit.action" method="post" id="form" name="form" style="background-color: aliceblue">
         <h2>用户编辑界面</h2>
         <input type="hidden" name="userId" id="userId" value="${user.userId}">
         <p></p>

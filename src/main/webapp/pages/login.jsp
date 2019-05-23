@@ -43,7 +43,7 @@
 <div>
     <center><h3 style="color: #005cbf">用户登录界面</h3></center>
     <center>
-        <form action="${pageContext.request.contextPath}/user/findUser.action" method="post" id="form" name="form">
+        <form action="${pageContext.request.contextPath}/user/login.action" method="post" id="form" name="form">
             <table  width="300px" >
                 <tr height="70px">
                     <td>用户名:</td>
