@@ -142,5 +142,17 @@ public class UserController {
         }
 
     }
+    @RequestMapping(value = "batchDelete")
+    public String batchDeleteUser(int[] userIdArray,Integer pageNum,HttpServletResponse response) throws IOException {
+        int rows = userService.batchDelUser(userIdArray);
+        if (rows>0){
+            return "forward:home.action?pageNum="+pageNum;
+        }
+        else {
+            PrintWriter out = response.getWriter();
+            out.print("<script>alert('批量删除失败！')</script>");
+            return "forward:home.action?pageNum="+pageNum;
+        }
+    }
 
 }

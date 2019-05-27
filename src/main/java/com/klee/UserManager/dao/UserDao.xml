@@ -48,4 +48,10 @@
     <delete id="deleteUser" parameterType="integer">
           delete from  user_ where  userId=#{userId}
     </delete>
+    <delete id="batchDelUser" parameterType="arraylist">
+          delete from  user_ where userId in
+          <foreach collection="array" index="index" item="userId" open="(" separator="," close=")">
+              #{userId}
+          </foreach>
+    </delete>
 </mapper>

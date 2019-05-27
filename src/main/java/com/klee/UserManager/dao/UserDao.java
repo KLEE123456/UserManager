@@ -14,4 +14,5 @@ public interface UserDao {
     int insertUser(User user);
     int updateUser(User user);
     int deleteUser(Integer userId);
+    int batchDelUser(int[] userArray);
 }

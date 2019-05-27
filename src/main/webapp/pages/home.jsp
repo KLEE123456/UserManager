@@ -35,6 +35,21 @@
                 }
 
             })
+            $("#delBtn").click(function () {
+                if (confirm("你确定要删除这些记录吗？")){
+                    var userIdArray=new Array();
+                    //获取多选组中被选中的元素
+                    var arr=$("input[name='deleteBox']:checked");
+                    if (arr.length==0){
+                        alert('请选择批量删除的记录!');
+                        return;
+                    }
+                    for (var i=0;i<arr.length;i++){
+                        userIdArray.push(arr[i].value);
+                    }
+                    location.href='${pageContext.request.contextPath}/user/batchDelete.action?userIdArray='+userIdArray+'&pageNum='+${page.pageNum};
+                }
+            })
         })
     </script>
     <style type="text/css">
@@ -47,7 +62,6 @@
 </head>
 <body>
 <center><h2>***************欢迎进入系统***************</h2></center>
-
 <table width="90%" align="center"  class="table-striped table-bordered" id="talbe">
     <tr>
         <td colspan="6"><i style="color: #005cbf">~hi,亲爱的<font color="#ff7f50">${userMsg.userName}</font></i></td>
@@ -91,13 +105,19 @@
                     <td align="center">${user.userPhone}</td>
                     <td align="center">
                         <a href="${pageContext.request.contextPath}/user/editXr.action?userId=${user.userId}&pageNum=${page.pageNum}">编辑</a>&nbsp;&nbsp;&nbsp;&nbsp;
-
                         <a href="javascript:void(0)" onclick="checkDel('${user.userName}','${user.userId}','${page.pageNum}')">删除</a>
+                        <input type="checkbox" id="${user.userId}" name="deleteBox" value="${user.userId}">
                     </td>
                 </tr>
             </c:forEach>
         </c:otherwise>
     </c:choose>
+    <tr>
+        <td colspan="6"></td>
+        <td>
+            <input type="button" value="批量删除" id="delBtn" name="delBtn" style="background-color:#0062cc;width:100%;color: white">
+        </td>
+    </tr>
 </table>
 <p/>
 <form id="form1" name="form1" action="<%=path%>/user/userQuit.action" method="post">

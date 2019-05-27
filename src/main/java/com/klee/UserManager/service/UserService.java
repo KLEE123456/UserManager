@@ -13,4 +13,5 @@ public interface UserService {
     int insertUser(User user);
     int updateUser(User user);
     int deleteUser(Integer userId);
+    int batchDelUser(int[] userArray);
 }
