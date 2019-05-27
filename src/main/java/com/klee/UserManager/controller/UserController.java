@@ -116,6 +116,7 @@ public class UserController {
         Integer pageNum=(Integer)session.getAttribute("pageNum");
         int rows = userService.updateUser(user);
         if (rows>0){
+
             return "forward:home.action?method=edit&pageNum="+pageNum;
         }
         else {
