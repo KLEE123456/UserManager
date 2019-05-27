@@ -121,6 +121,7 @@ public class UserController {
         }
         else {
             model.addAttribute("msg","编辑错误!");
+
            return "userEdit";
         }
     }
