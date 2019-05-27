@@ -41,6 +41,7 @@
                     //获取多选组中被选中的元素
                     var arr=$("input[name='deleteBox']:checked");
                     if (arr.length==0){
+
                         alert('请选择批量删除的记录!');
                         return;
                     }
