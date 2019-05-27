@@ -24,6 +24,10 @@ public class UserController {
     private UserService userService;
     @RequestMapping(value = "login")
     public String login(Model model, User user, HttpSession session){
+        if (user.getUserName()==null||user.getUserPwd()==null){
+            model.addAttribute("msg","用户名或密码错误!");
+            return "login";
+        }
         String userPwd = user.getUserPwd();
         user.setUserPwd(Md5Encrypt.MD5(userPwd));
         User user1 = userService.login(user);
