@@ -137,5 +137,6 @@
         <li class="page-item"><a class="page-link" href="<%=path%>/user/home.action?pageNum=${page.pages}">尾页</a></li>
     </ul>
 </div>
+<center><span id="myspan">${delMsg}</span></center>
 </body>
 </html>
