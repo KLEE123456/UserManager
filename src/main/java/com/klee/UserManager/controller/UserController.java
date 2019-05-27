@@ -20,6 +20,7 @@ import java.util.*;
 @Controller
 @RequestMapping(value = "/user/*")
 public class UserController {
+
     @Autowired
     private UserService userService;
     @RequestMapping(value = "login")
