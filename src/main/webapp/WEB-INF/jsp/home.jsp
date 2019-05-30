@@ -19,7 +19,7 @@
         }
         $(function () {
             $("#addId").click(function () {
-                location.href='/pages/add.jsp';
+                location.href='${pageContext.request.contextPath}/user/toAdd.action';
             })
             $("#rlogin").click(function () {
                 $("#form1").submit();

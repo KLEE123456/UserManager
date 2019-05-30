@@ -15,12 +15,21 @@ public class LoginInterceptor implements HandlerInterceptor {
         if (url.indexOf("login")!=-1){
             return  true;
         }
+        else if(url.indexOf("register")!=-1){
+            return true;
+        }
+        else if (url.indexOf("toRegister")!=-1){
+            return true;
+        }
+        else  if (url.indexOf("checkName")!=-1){
+            return true;
+        }
         else {
             HttpSession session=request.getSession();
             User user=(User) session.getAttribute("userMsg");
             if (user==null){
                 request.setAttribute("msg","您还没有进行登录,请先登录!");
-                request.getRequestDispatcher("/pages/login.jsp").forward(request,response);
+                request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request,response);
                 return  false;
             }
             else {

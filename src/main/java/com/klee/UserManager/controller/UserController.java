@@ -45,18 +45,36 @@ public class UserController {
 
     }
     @RequestMapping(value = "checkName")
-    public void checkName(String userName, HttpServletResponse response) throws IOException {
+    @ResponseBody
+    public String checkName(String userName,Model model){
+        if (userName==null){
+            model.addAttribute("reg","请输入检测信息!");
+            return "register";
+        }
         User user = userService.checkName(userName);
-        PrintWriter out=response.getWriter();
         if (user==null){
-           out.print(1);
+           return "true";
         }
         else {
-            out.print(0);
+            return "false";
         }
+
+    }
+    @RequestMapping(value = "toRegister")
+    public String toRegister(){
+        return "register";
+    }
+    @RequestMapping(value = "toAdd")
+    public String toAddUser(){
+        return "add";
     }
     @RequestMapping(value = "register")
     public String register(User user,Model model){
+        String userName=user.getUserName();
+        if (userName==null){
+            model.addAttribute("reg","请完善信息!");
+            return "register";
+        }
         String pwd=user.getUserPwd();
         user.setUserPwd( Md5Encrypt.MD5(pwd));
         int rows = userService.register(user);
@@ -69,14 +87,14 @@ public class UserController {
         }
     }
     @RequestMapping(value = "home")
-    public String findAllUser(Model model, HttpSession session, Integer pageNum,String userNames,String method){
+    public String findAllUser(Model model, HttpSession session, Integer pageNum,String userNames){
         if (userNames!=null){
             session.setAttribute("userNames",userNames);
         }
         List<User> userList=new ArrayList<>();
         Map<String,Object> map=new HashMap<>();
         String userNames1 = (String) session.getAttribute("userNames");
-        if (userNames1!=null&&method==null){
+        if (userNames1!=null){
             map.put("userName",userNames1);
         }
         else {
@@ -121,8 +139,7 @@ public class UserController {
         Integer pageNum=(Integer)session.getAttribute("pageNum");
         int rows = userService.updateUser(user);
         if (rows>0){
-
-            return "forward:home.action?method=edit&pageNum="+pageNum;
+            return "forward:home.action?pageNum="+pageNum;
         }
         else {
             model.addAttribute("msg","编辑错误!");
@@ -132,15 +149,19 @@ public class UserController {
     }
     @RequestMapping(value = "deleteUser")
     public String deleteUser(Integer userId, Integer pageNum,HttpServletResponse response) throws IOException {
+        response.setCharacterEncoding("utf-8");
         int rows = userService.deleteUser(userId);
-        if (rows>0){
-            return "forward:home.action?method=delete&pageNum="+pageNum;
-        }
-        else {
-            PrintWriter out=response.getWriter();
-            out.println("<script>alert('批量删除失败!');location.href='/user/home.action?pageNum='"+pageNum+"</script>");
-            return "";
-        }
+            if (rows>0){
+                return "forward:home.action?pageNum="+pageNum;
+            }
+
+            else {
+                PrintWriter out=response.getWriter();
+                out.println("<script>alert('Delete failed!');location.href='/user/home.action?pageNum="+pageNum+"'</script>");
+                out.flush();
+                out.close();
+                return "";
+             }
 
     }
     @RequestMapping(value = "batchDelete")
@@ -151,7 +172,9 @@ public class UserController {
         }
         else {
             PrintWriter out=response.getWriter();
-            out.println("<script>alert('批量删除失败!');location.href='/user/home.action?pageNum='"+pageNum+"</script>");
+            out.println("<script>alert('批量删除失败!');location.href='/user/home.action?pageNum="+pageNum+"'</script>");
+            out.flush();
+            out.close();
             return "";
         }
     }

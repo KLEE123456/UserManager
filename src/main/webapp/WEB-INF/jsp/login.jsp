@@ -69,7 +69,7 @@
                 </tr>
                 <tr  align="right">
                     <td colspan="2">
-                        <a href="<%=path%>/pages/register.jsp" style="text-decoration: none;color:olive"><i>注册</i>>>></a>
+                        <a href="${pageContext.request.contextPath}/user/toRegister.action" style="text-decoration: none;color:olive"><i>注册</i>>>></a>
                     </td>
 
                 </tr>

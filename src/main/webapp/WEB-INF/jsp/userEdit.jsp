@@ -22,11 +22,11 @@
                     url:'${pageContext.request.contextPath}/user/checkName.action',
                     data:{userName:userNames},
                     success:function (data) {
-                        if (data==1){
+                        if (data=="true"){
                             $("#msg").text("用户名检测成功,可以修改!");
                             document.getElementById("regbtn").disabled=false;
                         }
-                        if (data==0){
+                        if (data=="false"){
                            if (userName==$("#userName").val()){
                                $("#msg").text("用户名检测成功,可以修改!");
                                document.getElementById("regbtn").disabled=false;
