@@ -8,6 +8,7 @@
     <typeAliases>
         <package name="com.klee.UserManager.pojo" />
     </typeAliases>
+
     <!--分页配置-->
     <plugins>
         <plugin interceptor="com.github.pagehelper.PageHelper">
