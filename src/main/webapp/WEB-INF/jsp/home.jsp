@@ -18,6 +18,20 @@
             }
         }
         $(function () {
+            $("#homeBtn").click(function () {
+                location.href='${pageContext.request.contextPath}/user/backHome.action';
+            })
+            $("#myselect").blur(function () {
+                var val=$("#myselect").val();
+                if (val=='性别'){
+                    $("#form2").append('<input type="radio" id="male" name="userSexs" value="男" checked="checked">男');
+                    $("#form2").append('<input type="radio" id="female" name="userSexs" value="女">女');
+                    document.getElementById("userName").disabled=true;
+                }
+                if (val=='用户名'){
+                    document.getElementById("userName").disabled=false;
+                }
+            })
             $("#addId").click(function () {
                 location.href='${pageContext.request.contextPath}/user/toAdd.action';
             })
@@ -26,7 +40,8 @@
             })
             $("#btn").click(function () {
                 var userName=$("#userName").val();
-                if (userName==''){
+                var selectVal=$("#myselect").val();
+                if (userName==''&&selectVal=='用户名'){
                     alert('请输入查询的用户名!');
                     return;
                 }
@@ -63,7 +78,7 @@
 </head>
 <body>
 <center><h2>***************欢迎进入系统***************</h2></center>
-<table width="90%" align="center"  class="table-striped table-bordered" id="talbe">
+<table width="90%" align="center"  class="table-striped table-bordered" id="talbe" >
     <tr>
         <td colspan="6"><i style="color: #005cbf">~hi,亲爱的<font color="#ff7f50">${userMsg.userName}</font></i></td>
         <td>
@@ -73,12 +88,16 @@
     <tr>
         <td colspan="7">
             <form id="form2" name="form2" action="${pageContext.request.contextPath}/user/home.action">
-                <input type="text" placeholder="请输入用户名" id="userName" name="userNames" value="${userNames}">
+                <select id="myselect" name="myselect">
+                    <option>用户名</option>
+                    <option>性别</option>
+                </select>
+                <input type="text" placeholder="请输入查询信息" id="userName" name="userNames" value="${userNames}">
                 <input type="button" value="查询" id="btn" name="btn" style="background-color:#0062cc;width:60px;color: white">
             </form>
         </td>
     </tr>
-    <tr align="center" bgcolor="#ffebcd" height="30px">
+    <tr align="center" bgcolor="#ffebcd" height="30px" >
         <td>序号</td>
         <td>用户id</td>
         <td>用户姓名</td>
@@ -114,7 +133,11 @@
         </c:otherwise>
     </c:choose>
     <tr>
-        <td colspan="6"></td>
+        <td colspan="6">
+            <button  type="button" id="homeBtn" class="btn btn-primary btn-sm">
+                返回首页
+            </button>
+        </td>
         <td>
             <input type="button" value="批量删除" id="delBtn" name="delBtn" style="background-color:#0062cc;width:100%;color: white">
         </td>
@@ -122,18 +145,18 @@
 </table>
 <p/>
 <form id="form1" name="form1" action="<%=path%>/user/userQuit.action" method="post">
-    <input type="button" id="rlogin" name="rlogin" value="安全退出" style="width: 100px;background-color: beige;color:olivedrab;margin-left: 5%">
+    <input type="button" id="rlogin" name="rlogin"  class="btn btn-primary btn-sm"  value="安全退出" style="margin-left: 5%">
 </form>
+
 <div class="div1" style="text-align: center">
     <font style="align:center">当前页是第${page.pageNum}页，总共${page.pages}页，总记录数${page.total}条</font>
 </div>
-
 <!--boostrap4 版本-->
 <div class="div1" style="padding-left: 60px">
     <ul class="pagination" >
         <li class="page-item"><a class="page-link" href="<%=path%>/user/home.action?pageNum=1">首页</a></li>
-        <li class="page-item" id="upPage"><a  class="page-link" href="<%=path%>/user/home.action?pageNum=${page.prePage}">上一页</a></li>
-        <li class="page-item" id="downPage"><a  class="page-link" href="<%=path%>/user/home.action?pageNum=${page.nextPage}">下一页</a></li>
+        <li class="page-item" id="upPage"><a class="page-link" href="<%=path%>/user/home.action?pageNum=${page.prePage}">上一页</a></li>
+        <li  class="page-item" id="downPage"><a class="page-link"   href="<%=path%>/user/home.action?pageNum=${page.nextPage}">下一页</a></li>
         <li class="page-item"><a class="page-link" href="<%=path%>/user/home.action?pageNum=${page.pages}">尾页</a></li>
     </ul>
 </div>

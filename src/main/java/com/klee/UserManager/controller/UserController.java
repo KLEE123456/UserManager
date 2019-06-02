@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 
@@ -23,6 +24,14 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    /**
+     * 登录控制器方法
+     * @param model
+     * @param user
+     * @param session
+     * @return
+     */
     @RequestMapping(value = "login")
     public String login(Model model, User user, HttpSession session){
         if (user.getUserName()==null||user.getUserPwd()==null){
@@ -44,6 +53,13 @@ public class UserController {
         }
 
     }
+
+    /**
+     * 用户名检测控制器方法
+     * @param userName
+     * @param model
+     * @return
+     */
     @RequestMapping(value = "checkName")
     @ResponseBody
     public String checkName(String userName,Model model){
@@ -60,14 +76,31 @@ public class UserController {
         }
 
     }
+
+    /**
+     * 跳转到注册界面
+     * @return
+     */
     @RequestMapping(value = "toRegister")
     public String toRegister(){
         return "register";
     }
+
+    /**
+     *跳转到新增页面
+     * @return
+     */
     @RequestMapping(value = "toAdd")
     public String toAddUser(){
         return "add";
     }
+
+    /**
+     * 注册控制器方法
+     * @param user
+     * @param model
+     * @return
+     */
     @RequestMapping(value = "register")
     public String register(User user,Model model){
         String userName=user.getUserName();
@@ -86,19 +119,41 @@ public class UserController {
             return "register";
         }
     }
+
+    /**
+     * 查询控制器方法
+     * @param model
+     * @param session
+     * @param pageNum
+     * @param userNames
+     * @param userSexs
+     * @return
+     * @throws UnsupportedEncodingException
+     */
     @RequestMapping(value = "home")
-    public String findAllUser(Model model, HttpSession session, Integer pageNum,String userNames){
+    public String findAllUser(Model model, HttpSession session, Integer pageNum,String userNames,String userSexs) throws UnsupportedEncodingException {
         if (userNames!=null){
+            userNames = new String(userNames.getBytes("ISO-8859-1"), "UTF-8");
             session.setAttribute("userNames",userNames);
         }
         List<User> userList=new ArrayList<>();
         Map<String,Object> map=new HashMap<>();
         String userNames1 = (String) session.getAttribute("userNames");
+        String userSex1=(String) session.getAttribute("userSex");
         if (userNames1!=null){
             map.put("userName",userNames1);
         }
+        else if (userSex1!=null){
+            map.put("userSex",userSex1);
+        }
+        else if (userSexs!=null){
+            userSexs=new String(userSexs.getBytes("ISO-8859-1"),"UTF-8");
+            session.setAttribute("userSex",userSexs);
+            map.put("userSex",userSexs);
+        }
         else {
             map.put("userName",null);
+            map.put("userSex",null);
         }
         userList = userService.findUser(map,pageNum);
         PageInfo pageInfo=new PageInfo(userList);
@@ -107,24 +162,45 @@ public class UserController {
         return "home";
     }
 
+    /**
+     * 安全退出控制器方法
+     * @param session
+     * @return
+     */
     @RequestMapping(value = "userQuit")
     public String userQuit(HttpSession session){
         session.invalidate();
         return "login";
     }
+
+    /**
+     * 新增控制器方法
+     * @param user
+     * @param model
+     * @return
+     */
     @RequestMapping(value = "add")
     public  String  insertUser(User user,Model model){
         String pwd=user.getUserPwd();
         user.setUserPwd(Md5Encrypt.MD5(pwd));
         int rows = userService.insertUser(user);
         if (rows>0){
-            return  "forward:home.action?method=add";
+            return  "forward:home.action";
         }
         else {
             model.addAttribute("ist","添加失败!请和管理员联系");
             return "add";
         }
     }
+
+    /**
+     * 编辑渲染控制器方法
+     * @param userId
+     * @param pageNum
+     * @param model
+     * @param session
+     * @return
+     */
     @RequestMapping(value = "editXr")
     public  String  editXr(Integer userId,Integer pageNum,Model model,HttpSession session){
         session.setAttribute("pageNum",pageNum);
@@ -134,6 +210,14 @@ public class UserController {
         model.addAttribute("user",user.get(0));
         return  "userEdit";
     }
+
+    /**
+     * 编辑控制器方法
+     * @param user
+     * @param session
+     * @param model
+     * @return
+     */
     @RequestMapping(value = "userEdit")
     public String editUser(User user,HttpSession session,Model model){
         Integer pageNum=(Integer)session.getAttribute("pageNum");
@@ -147,6 +231,15 @@ public class UserController {
            return "userEdit";
         }
     }
+
+    /**
+     * 删除控制器方法
+     * @param userId
+     * @param pageNum
+     * @param response
+     * @return
+     * @throws IOException
+     */
     @RequestMapping(value = "deleteUser")
     public String deleteUser(Integer userId, Integer pageNum,HttpServletResponse response) throws IOException {
         response.setCharacterEncoding("utf-8");
@@ -164,6 +257,15 @@ public class UserController {
              }
 
     }
+
+    /**
+     * 批量删除控制器方法
+     * @param userIdArray
+     * @param pageNum
+     * @param response
+     * @return
+     * @throws IOException
+     */
     @RequestMapping(value = "batchDelete")
     public String batchDeleteUser(int[] userIdArray,Integer pageNum,HttpServletResponse response) throws IOException {
         int rows = userService.batchDelUser(userIdArray);
@@ -172,11 +274,23 @@ public class UserController {
         }
         else {
             PrintWriter out=response.getWriter();
-            out.println("<script>alert('批量删除失败!');location.href='/user/home.action?pageNum="+pageNum+"'</script>");
+            out.println("<script>alert('Batch delete failed!');location.href='/user/home.action?pageNum="+pageNum+"'</script>");
             out.flush();
             out.close();
             return "";
         }
+    }
+
+    /**
+     * 返回主页控制器方法
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "backHome")
+    public String backHome(HttpSession session){
+        session.setAttribute("userNames",null);
+        session.setAttribute("userSex",null);
+        return  "forward:home.action";
     }
 
 }

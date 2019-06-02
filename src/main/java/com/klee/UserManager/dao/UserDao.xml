@@ -21,6 +21,9 @@
          <if test="userName!='' and userName!=null">
             and userName like concat('%',#{userName},'%')
         </if>
+        <if test="userSex!='' and userSex!=null">
+            and userSex=#{userSex}
+        </if>
         </where>
     </select>
     <insert id="insertUser" parameterType="user">
