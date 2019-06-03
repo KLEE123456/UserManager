@@ -51,19 +51,20 @@
 
             })
             $("#delBtn").click(function () {
-                if (confirm("你确定要删除这些记录吗？")){
-                    var userIdArray=new Array();
-                    //获取多选组中被选中的元素
-                    var arr=$("input[name='deleteBox']:checked");
-                    if (arr.length==0){
+                var arr=$("input[name='deleteBox']:checked");
+                if(arr.length==0){
+                    alert('请选择批量删除的记录!');
+                    return;
+                }
+                else{
 
-                        alert('请选择批量删除的记录!');
-                        return;
+                    if(confirm("你确定要删除这些记录吗？")){
+                        var userIdArray=new Array();
+                        for (var i=0;i<arr.length;i++){
+                            userIdArray.push(arr[i].value);
+                        }
+                        location.href='${pageContext.request.contextPath}/user/batchDelete.action?userIdArray='+userIdArray+'&pageNum='+${page.pageNum};
                     }
-                    for (var i=0;i<arr.length;i++){
-                        userIdArray.push(arr[i].value);
-                    }
-                    location.href='${pageContext.request.contextPath}/user/batchDelete.action?userIdArray='+userIdArray+'&pageNum='+${page.pageNum};
                 }
             })
         })
@@ -135,7 +136,7 @@
     <tr>
         <td colspan="6">
             <button  type="button" id="homeBtn" class="btn btn-primary btn-sm">
-                返回首页
+                返回主页
             </button>
         </td>
         <td>
